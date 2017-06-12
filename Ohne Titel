@@ -1,0 +1,89 @@
+install latest virtualbox
+- install latest vagrant
+- install vagrant plugin install vagrant-share --plugin-version 1.1.8
+- git pull all repos (it_ops, orocrm, bolt)
+- in it ops: automations../ansible: vagrant up / provision
+- jetzt alles weitere in vagrant:
+   - ssh setup
+       - banovo* keys lokal
+       - ssh-add keys
+       - ssh config
+       - ssh login web5 testen/bestätigen
+
+   - mysql db importieren
+       - login web5, strg+r + show => mysql -e "show databases;"
+       - latest banovo_orocrm_prod_20170426124844Z
+       - exit !!!!!!!!
+
+       - in vagrant!!!:
+           mysql banovo_orocrm_dev < <(ssh -C web@web5.banovo.de "mysqldump --opt banovo_orocrm_prod_20170426124844Z")
+
+   - oro (kann paralell mit vagrant provision laufen):
+       - composer global install/self-update
+       - composer global require hirak/prestissimo
+       - composer install --prefer-source
+
+patrick [11:09]
+# banovo
+192.168.33.99    vagrant cms.dev cms-dev.dev crm-dev.dev crm.dev frontend.dev webix.dev grav.dev filemanager.dev
+
+[11:12]
+##############
+# BANOVO
+##############
+Host banovoserver
+  HostName 192.168.60.15
+  User root
+  IdentityFile ~/.ssh/id_dsa
+
+Host starface
+  HostName 192.168.60.5
+  User root
+  IdentityFile ~/.ssh/id_dsa
+
+Host web4
+  HostName web4.banovo.de
+  User web
+  IdentityFile ~/.ssh/banovo_web_rsa
+  ForwardAgent yes
+  AddressFamily inet
+
+Host web5
+  HostName web5.banovo.de
+  User web
+  IdentityFile ~/.ssh/banovo_web_rsa
+  ForwardAgent yes
+  AddressFamily inet
+
+Host web6
+  HostName web6.banovo.de
+  User root
+  IdentityFile ~/.ssh/banovo_ansible_rsa
+  ForwardAgent yes
+  AddressFamily inet
+
+Host *.banovo.de
+ User web
+ IdentityFile ~/.ssh/banovo_web_rsa
+ ForwardAgent yes
+ AddressFamily inet
+
+Host vagrant
+  HostName vagrant
+  User vagrant
+  ForwardAgent yes
+  IdentityFile ~/.vagrant.d/insecure_private_key
+  IdentityFile ~/.ssh/banovo_web_rsa
+
+patrick [11:58]
+export PATH="$HOME/bin:/usr/local/bin:$PATH";
+
+patrick [12:28]
+phpstorm plugins: orocrm, symfony, ignore, bashsupport, editorconfig, php annotations
+
+atijani [5:48 PM]
+taifun_database_name
+
+[5:48]
+mailer_user:            wp12381564-notify
+   mailer_password:        ~
